@@ -17,6 +17,9 @@ jobs:
       - name: Set up Python
         run: uv python install
 
+      - name: Setup Caches
+        run: uv cache dir
+
       - name: Install depencencies
         run: uv sync --all-extras --dev
 
