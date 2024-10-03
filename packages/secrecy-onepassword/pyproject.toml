@@ -15,4 +15,4 @@ path = "src/secrecy_onepassword/__about__.py"
 
 [tool.uv.sources]
 secrecy = { workspace = true }
-onepassword = { git = "ssh://git@github.com/1Password/onepassword-sdk-python.git", rev = "v0.1.1" }
+onepassword = { git = "https://github.com/1Password/onepassword-sdk-python", rev = "v0.1.1" }
