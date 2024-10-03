@@ -37,7 +37,7 @@ jobs:
           SECRECY_TESTS_AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRECY_TESTS_AWS_SECRET_ACCESS_KEY }}
           SECRECY_TESTS_AWS_DEFAULT_REGION: ${{ secrets.SECRECY_TESTS_AWS_DEFAULT_REGION }}
           SECRECY_TESTS_AWS_SECRET_ID : ${{ secrets.SECRECY_TESTS_AWS_SECRET_ID  }}
-        run: uv run pytest -vvv -rsx --cov --junitxml=testreport.junit.xml
+        run: uv run pytest -vvv -rsx --cov --cov-report xml --junitxml=testreport.junit.xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
