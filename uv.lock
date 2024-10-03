@@ -259,7 +259,7 @@ wheels = [
 [[package]]
 name = "onepassword"
 version = "0.1.1"
-source = { git = "ssh://git@github.com/1Password/onepassword-sdk-python.git?rev=v0.1.1#713e09f287bdb0661514aab82e5673839dfeb845" }
+source = { git = "https://github.com/1Password/onepassword-sdk-python?rev=v0.1.1#713e09f287bdb0661514aab82e5673839dfeb845" }
 dependencies = [
     { name = "pydantic" },
 ]
@@ -540,7 +540,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "onepassword", git = "ssh://git@github.com/1Password/onepassword-sdk-python.git?rev=v0.1.1" },
+    { name = "onepassword", git = "https://github.com/1Password/onepassword-sdk-python?rev=v0.1.1" },
     { name = "secrecy", editable = "packages/secrecy" },
 ]
 

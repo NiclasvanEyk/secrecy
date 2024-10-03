@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  - push
+
+jobs:
+  Tests:
+    name: Validate & Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Set up Python
+        run: uv python install
+
+      - name: Setup Caches
+        run: uv cache dir
+
+      - name: Install depencencies
+        run: uv sync --all-extras --dev
+
+      - name: Lint
+        run: uv run ruff check --output-format=github
+
+      - name: Format
+        run: uv run ruff format
+
+      - name: Test
+        run: uv run pytest -vvv -rsx --cov --junitxml=testreport.junit.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
