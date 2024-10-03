@@ -29,6 +29,14 @@ jobs:
         run: uv run ruff format
 
       - name: Test
+        env:
+          SECRECY_TESTS_1PW_ITEM_ID: ${{ secrets.SECRECY_TESTS_1PW_ITEM_ID }}
+          SECRECY_TESTS_1PW_VAULT_ID: ${{ secrets.SECRECY_TESTS_1PW_VAULT_ID }}
+          SECRECY_TESTS_1PW_SERVICE_ACCOUNT_TOKEN: ${{ secrets.SECRECY_TESTS_1PW_SERVICE_ACCOUNT_TOKEN }}
+          SECRECY_TESTS_AWS_ACCESS_KEY_ID: ${{ secrets.SECRECY_TESTS_AWS_ACCESS_KEY_ID }}
+          SECRECY_TESTS_AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRECY_TESTS_AWS_SECRET_ACCESS_KEY }}
+          SECRECY_TESTS_AWS_DEFAULT_REGION: ${{ secrets.SECRECY_TESTS_AWS_DEFAULT_REGION }}
+          SECRECY_TESTS_AWS_SECRET_ID : ${{ secrets.SECRECY_TESTS_AWS_SECRET_ID  }}
         run: uv run pytest -vvv -rsx --cov --junitxml=testreport.junit.xml
 
       - name: Upload coverage to Codecov
