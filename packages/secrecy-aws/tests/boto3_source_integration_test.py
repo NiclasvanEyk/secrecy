@@ -3,30 +3,23 @@ import os
 import pytest
 from secrecy.autoresolve.sync import secrecy
 
-SECRET_ID_VAR_NAME = "SECRECY_TESTS_AWS_SECRET_ID"
 
-
-@pytest.mark.asyncio
 async def test_it_works():
-    for var in (
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "AWS_DEFAULT_REGION",
-    ):
-        if os.environ.get(var) is None:
-            pytest.skip(f"{var} not present, skipping aws integration tests...")
-
-    secret_id = os.environ.get(SECRET_ID_VAR_NAME)
-    if secret_id is None:
-        pytest.skip(
-            f"{SECRET_ID_VAR_NAME} not present, skipping aws integration tests..."
-        )
-
     os.environ["SECRECY_FOO_DRIVER"] = "aws-boto3"
-    os.environ["SECRECY_FOO_SECRET_ID"] = secret_id
+    os.environ["AWS_ACCESS_KEY_ID"] = require("SECRECY_TESTS_AWS_ACCESS_KEY_ID")
+    os.environ["AWS_SECRET_ACCESS_KEY"] = require("SECRECY_TESTS_AWS_SECRET_ACCESS_KEY")
+    os.environ["AWS_DEFAULT_REGION"] = require("SECRECY_TESTS_AWS_DEFAULT_REGION")
+    os.environ["SECRECY_FOO_SECRET_ID"] = require("SECRECY_TESTS_AWS_SECRET_ID")
 
     secrets = secrecy("foo")
     assert secrets == {
         "user": "some-user",
         "password": "the-password",
     }
+
+
+def require(env_var_name: str) -> str:
+    value = os.environ.get(env_var_name)
+    if value is None:
+        pytest.skip(f"{env_var_name} not present, skipping aws integration tests...")
+    return value
