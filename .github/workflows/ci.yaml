@@ -31,3 +31,6 @@ jobs:
 
       - name: Test
         run: uv run pytest -vvv -rsx --cov
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
