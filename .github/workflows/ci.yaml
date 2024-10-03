@@ -2,7 +2,6 @@ name: CI
 
 on:
   - push
-  - pull_request
 
 jobs:
   Tests:
@@ -25,7 +24,7 @@ jobs:
         run: uv run ruff check --output-format=github
 
       - name: Format
-        run: uv run ruff format --output-format=github
+        run: uv run ruff format
 
       - name: Test
         run: uv run pytest -vvv -rsx --cov
