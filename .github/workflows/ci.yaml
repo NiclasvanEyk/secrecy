@@ -13,6 +13,8 @@ jobs:
 
       - name: Install uv
         uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
 
       - name: Set up Python
         run: uv python install
@@ -42,3 +44,4 @@ jobs:
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
