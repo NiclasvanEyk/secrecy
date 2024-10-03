@@ -1,0 +1,22 @@
+[project]
+name = "secrecy-aws"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "boto3>=1.35.29",
+  "secrecy",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv]
+dev-dependencies = [
+    "boto3-stubs[boto3,secretsmanager]>=1.35.30",
+]
+
+[tool.uv.sources]
+secrecy = { workspace = true }

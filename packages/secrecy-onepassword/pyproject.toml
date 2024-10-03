@@ -1,0 +1,18 @@
+[project]
+name = "secrecy-onepassword"
+dynamic = ["version"]
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["onepassword", "secrecy"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/secrecy_onepassword/__about__.py"
+
+[tool.uv.sources]
+secrecy = { workspace = true }
+onepassword = { git = "ssh://git@github.com/1Password/onepassword-sdk-python.git", rev = "v0.1.1" }
