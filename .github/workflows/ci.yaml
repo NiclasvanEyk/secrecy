@@ -30,7 +30,7 @@ jobs:
         run: uv run ruff format
 
       - name: Test
-        run: uv run pytest -vvv -rsx --cov
+        run: uv run pytest -vvv -rsx --cov --cov-report=xml
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
