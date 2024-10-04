@@ -101,7 +101,7 @@ secrecy-file --help
 As described by the output, we can create an new file using
 
 ```
-secrecy-file --name=my_database create
+secrecy-file create my_database
 Created a new empty secrets file in './secrets/my_database'!
 
 Your encryption password is the following:
