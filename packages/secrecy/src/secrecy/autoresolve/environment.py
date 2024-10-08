@@ -21,7 +21,6 @@ def require_environment_variable(
 
 def optional_environment_variable(
     prefix: str,
-    secret_name: str,
     unprefix_variable_name: str,
     default: str,
 ) -> str:

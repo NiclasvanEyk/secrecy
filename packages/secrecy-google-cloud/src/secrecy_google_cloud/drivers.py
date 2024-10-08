@@ -12,7 +12,5 @@ def secret_manager_sync(prefix: str, secret_name: str) -> SecretManagerSecretSou
         client=SecretManagerServiceClient(),
         project_id=require_environment_variable(prefix, secret_name, "PROJECT_ID"),
         secret_name=secret_name,
-        secret_version=optional_environment_variable(
-            prefix, secret_name, "VERSION", "latest"
-        ),
+        secret_version=optional_environment_variable(prefix, "VERSION", "latest"),
     )

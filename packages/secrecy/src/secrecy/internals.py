@@ -24,10 +24,12 @@ def resolve_source_factory(name: str) -> tuple[Any, ResolvedSourceMeta]:
 
     # Find the python function that will build the thing that fetches our secrets
     driver_module_specifier = {
-        "encrypted_file": "secrecy_file.drivers:encrypted_file",
-        "environment": "secrecy_environment.drivers:environment",
-        "onepassword-sdk": "secrecy_onepassword.drivers:sdk",
         "aws-boto3": "secrecy_aws.drivers:boto3",
+        "docker": "secrecy_docker.drivers:docker",
+        "encrypted-file": "secrecy_file.drivers:encrypted_file",
+        "environment": "secrecy_environment.drivers:environment",
+        "google-cloud": "secrecy_google_cloud.drivers:secret_manager_sync",
+        "onepassword-sdk": "secrecy_onepassword.drivers:sdk",
     }.get(driver)
     if driver_module_specifier is None:
         raise Exception(

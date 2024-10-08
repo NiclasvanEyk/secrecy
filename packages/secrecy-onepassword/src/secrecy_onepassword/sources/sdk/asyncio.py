@@ -1,10 +1,10 @@
 from typing import override
 
 from onepassword.types import Item
-from secrecy.abc.asyncio import SecretsSource
+from secrecy.abc.asyncio import ReadableSecretsSource
 
 
-class OnePasswordSdkSecretsSource(SecretsSource):
+class OnePasswordSdkSecretsSource(ReadableSecretsSource):
     def __init__(self, client, vault_id: str, item_id: str) -> None:
         super().__init__()
         self.client = client

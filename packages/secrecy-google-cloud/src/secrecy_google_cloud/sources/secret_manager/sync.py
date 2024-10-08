@@ -2,10 +2,10 @@ import json
 from typing import override
 
 from google.cloud.secretmanager import SecretManagerServiceClient
-from secrecy.abc.sync import SecretsSource
+from secrecy.abc.sync import ReadableSecretsSource
 
 
-class SecretManagerSecretSource(SecretsSource):
+class SecretManagerSecretSource(ReadableSecretsSource):
     def __init__(
         self,
         client: SecretManagerServiceClient,
@@ -27,7 +27,3 @@ class SecretManagerSecretSource(SecretsSource):
 
     def resource_name(self) -> str:
         return f"projects/{self.project_id}/secrets/{self.secret_name}/versions/{self.secret_version}"
-
-    @override
-    def push(self, values: dict[str, str]) -> None:
-        raise NotImplementedError

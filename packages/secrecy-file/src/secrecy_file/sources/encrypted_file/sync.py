@@ -3,12 +3,12 @@ from pathlib import Path
 from typing import override
 
 from cryptography.fernet import Fernet
-from secrecy.abc.sync import SecretsSource
+from secrecy.abc.sync import ReadableSecretsSource, WritableSecretsSource
 
 from secrecy_file.encryption import FernetEncryption, SymmetricEncryption
 
 
-class EncryptedFileSecretsSource(SecretsSource):
+class EncryptedFileSecretsSource(ReadableSecretsSource, WritableSecretsSource):
     """
     A collection of secret values stored in an encrypted file on the filesystem.
     """

@@ -1,9 +1,9 @@
 from typing import override
 
-from secrecy.abc.sync import SecretsSource
+from secrecy.abc.sync import ReadableSecretsSource, WritableSecretsSource
 
 
-class InMemorySecretsSource(SecretsSource):
+class InMemorySecretsSource(ReadableSecretsSource, WritableSecretsSource):
     """
     Stores secrets in a dictionary in memory.
 
