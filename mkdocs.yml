@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Secrecy
+site_url: https://secrecy.niclasve.me
+repo_url: https://github.com/NiclasvanEyk/secrecy
+repo_name: NiclasvanEyk/secrecy
+
+nav:
+  - Home: index.md
+  - Core: core/index.md
+  - Ecosystem: ecosystem/index.md
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme)"
+      primary: black
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+  icon:
+    logo: material/safe-square-outline
+    repo: fontawesome/brands/github
+  features:
+    - content.tooltips
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tabs
+    - navigation.tracking
+    - toc.follow
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: NiclasvanEyk/secrecy
+      branch: main
