@@ -9,6 +9,7 @@ resolution-markers = [
 members = [
     "secrecy",
     "secrecy-aws",
+    "secrecy-docker",
     "secrecy-environment",
     "secrecy-file",
     "secrecy-google-cloud",
@@ -432,11 +433,19 @@ wheels = [
 ]
 
 [[package]]
-name = "onepassword"
-version = "0.1.1"
-source = { git = "https://github.com/1Password/onepassword-sdk-python?rev=v0.1.1#713e09f287bdb0661514aab82e5673839dfeb845" }
+name = "onepassword-sdk"
+version = "0.1.2"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/1b/96/0de6ed472a953ac55ca97e78fcd6e96442921b7b050993dcad402ab1c2c4/onepassword_sdk-0.1.2.tar.gz", hash = "sha256:029ba2e03accc9ffe762414721bc29fd153103afa972d361c1a67d75678d9a5f", size = 19616027 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/40/b7/8fffb74933b294a274959f4b1f4044ccfeb2fc7f17cba034bbf7538f5085/onepassword_sdk-0.1.2-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:6da00e28c74a268597d104c3b77fa6f75dc7e75300273d7d245bd07c037d1dd2", size = 3987391 },
+    { url = "https://files.pythonhosted.org/packages/9c/8a/d0e392430d53aee6aef20402b9042c8531cbdae0535ce9f867ff20a7bc17/onepassword_sdk-0.1.2-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:d28ed9f1f27cb32d418e36ec26b59c4436b2d6627d8ed41a8a84f61c73f28271", size = 3680823 },
+    { url = "https://files.pythonhosted.org/packages/9b/2e/9a61dfa30d403a3b97c9be0aa2b6cfe154a7643f60b3e534d6ed2021b848/onepassword_sdk-0.1.2-cp312-cp312-manylinux_2_32_aarch64.whl", hash = "sha256:a03517073b581d7a6525976b2ee79b3a16adc5cd39640ae7e596c33d28d23853", size = 4155082 },
+    { url = "https://files.pythonhosted.org/packages/6e/0b/6e4cac1821ccbb045c4cc707b8408c878a1129fb213142dbda81b554f5a7/onepassword_sdk-0.1.2-cp312-cp312-manylinux_2_32_x86_64.whl", hash = "sha256:663cc389c34eb88bd6f6d74fff5aa6ea7dd96365998c8a3c86ea3528675cd919", size = 4347729 },
+    { url = "https://files.pythonhosted.org/packages/91/25/88c6ce80f3317f53e6cdb9a4e83c3b33c4222cdf863dbf245f45c1323e1d/onepassword_sdk-0.1.2-cp312-cp312-win_amd64.whl", hash = "sha256:33fa9d53f93fdaf5593aeb45a270023f49df42b4790aa498d521e47c4c1c0a80", size = 3621579 },
 ]
 
 [[package]]
@@ -753,6 +762,17 @@ requires-dist = [
 dev = [{ name = "boto3-stubs", extras = ["boto3", "secretsmanager"], specifier = ">=1.35.30" }]
 
 [[package]]
+name = "secrecy-docker"
+version = "0.1.0"
+source = { editable = "packages/secrecy-docker" }
+dependencies = [
+    { name = "secrecy" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "secrecy", editable = "packages/secrecy" }]
+
+[[package]]
 name = "secrecy-environment"
 version = "0.1.0"
 source = { editable = "packages/secrecy-environment" }
@@ -794,13 +814,13 @@ name = "secrecy-onepassword"
 version = "0.0.1"
 source = { editable = "packages/secrecy-onepassword" }
 dependencies = [
-    { name = "onepassword" },
+    { name = "onepassword-sdk" },
     { name = "secrecy" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "onepassword", git = "https://github.com/1Password/onepassword-sdk-python?rev=v0.1.1" },
+    { name = "onepassword-sdk", specifier = ">=0.1.2" },
     { name = "secrecy", editable = "packages/secrecy" },
 ]
 
