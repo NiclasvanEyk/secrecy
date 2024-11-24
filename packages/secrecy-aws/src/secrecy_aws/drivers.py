@@ -15,4 +15,7 @@ def boto3(prefix: str, name: str) -> SecretsManagerSecretSource:
     if len(secret_id) == 0:
         raise Exception(f"{secret_id_var_name} is set, but empty")
 
+    # TODO: Support passing configuration options to the client explicitly for this secret.
+    #       This would unlock loading secrets from different regions, accounts, etc.
+
     return SecretsManagerSecretSource(secret_id)

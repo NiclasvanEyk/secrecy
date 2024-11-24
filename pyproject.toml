@@ -26,3 +26,6 @@ asyncio_default_fixture_loop_scope = "session"
 include = ["packages/**/*.py"]
 branch = true
 parallel = true
+
+[tool.secrecy.secrets]
+modules = ["secrecy.cli_test"]

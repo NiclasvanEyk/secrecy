@@ -1,3 +1,7 @@
+"""
+An in-memory secrets source backed by a dict.
+"""
+
 from typing import override
 
 from secrecy.abc.sync import ReadableSecretsSource, WritableSecretsSource
@@ -10,9 +14,9 @@ class InMemorySecretsSource(ReadableSecretsSource, WritableSecretsSource):
     This is not safe, and is intended for testing purposes only!
     """
 
-    def __init__(self, values: dict[str, str]) -> None:
+    def __init__(self, values: dict[str, str] | None = None) -> None:
         super().__init__()
-        self.values = values
+        self.values = values if values is not None else {}
 
     @override
     def pull(self) -> dict[str, str]:

@@ -1,3 +1,7 @@
+"""
+Base exception classes and other core exception handling utilities.
+"""
+
 class SecrecyError(BaseException):
     """The base class for all errors thrown by secrecy."""
 

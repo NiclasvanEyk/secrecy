@@ -6,9 +6,20 @@ repo_url: https://github.com/NiclasvanEyk/secrecy
 repo_name: NiclasvanEyk/secrecy
 
 nav:
-  - Home: index.md
-  - Core: core/index.md
-  - Ecosystem: ecosystem/index.md
+  - Getting Started: index.md
+  - Core:
+      - core/index.md
+      - Concepts: core/concepts.md
+  - Ecosystem:
+      - ecosystem/index.md
+      - Simple Solutions:
+          - Encrypted Files: ecosystem/simple_solutions/encrypted_files.md
+      - Cloud Providers:
+          - Amazon Web Services (AWS): ecosystem/cloud_providers/aws.md
+          - Azure: ecosystem/cloud_providers/azure.md
+          - Google Cloud: ecosystem/cloud_providers/google_cloud.md
+      - Password Managers:
+          - 1Password: ecosystem/password_managers/onepassword.md
 
 theme:
   name: material
@@ -26,16 +37,21 @@ theme:
     repo: fontawesome/brands/github
   features:
     - content.tooltips
+    - content.code.annotate
+    - navigation.footer
     - navigation.indexes
     - navigation.instant
     - navigation.instant.progress
-    - navigation.tabs
+    - navigation.path
     - navigation.tracking
     - toc.follow
 
 markdown_extensions:
   - toc:
       permalink: "#"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
 
 plugins:
   - search
