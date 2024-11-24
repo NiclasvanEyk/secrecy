@@ -1,15 +1,14 @@
-import logging
 import os
 from typing import override
 
-from secrecy.abc.sync import SecretsSource
+from secrecy.abc.sync import ReadableSecretsSource
 
 INTERNAL_KEYS = {
     "driver",
 }
 
 
-class EnvironmentVariablesSecretsSource(SecretsSource):
+class EnvironmentVariablesSecretsSource(ReadableSecretsSource):
     def __init__(self, prefix: str) -> None:
         super().__init__()
         self.prefix = prefix
@@ -28,9 +27,3 @@ class EnvironmentVariablesSecretsSource(SecretsSource):
 
                 secrets[sanitized_key] = value
         return secrets
-
-    @override
-    def push(self, values: dict[str, str]) -> None:
-        logging.warning(
-            "It does not make sense to change secrets when using the environment-variable driver! This has no effect."
-        )

@@ -1,5 +1,8 @@
 [tool.uv]
 dev-dependencies = [
+    "mkdocs-git-committers-plugin-2>=2.4.1",
+    "mkdocs-git-revision-date-localized-plugin>=1.2.9",
+    "mkdocs-material>=9.5.40",
     "mypy>=1.11.2",
     "pytest-asyncio>=0.24.0",
     "pytest-coverage>=0.0",
@@ -23,3 +26,6 @@ asyncio_default_fixture_loop_scope = "session"
 include = ["packages/**/*.py"]
 branch = true
 parallel = true
+
+[tool.secrecy.secrets]
+modules = ["secrecy.cli_test"]

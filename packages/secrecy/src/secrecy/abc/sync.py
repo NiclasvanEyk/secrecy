@@ -3,9 +3,9 @@ from typing import Protocol, runtime_checkable
 
 
 @runtime_checkable
-class SecretsSource(Protocol):
+class ReadableSecretsSource(Protocol):
     """
-    A generic protocol for retreiving and storing a group of secrets.
+    A generic protocol for retreiving a group of secrets.
     """
 
     @abstractmethod
@@ -13,6 +13,13 @@ class SecretsSource(Protocol):
         """
         Retreive the secrets from the source.
         """
+
+
+@runtime_checkable
+class WritableSecretsSource(Protocol):
+    """
+    A generic protocol for storing a group of secrets.
+    """
 
     @abstractmethod
     def push(self, values: dict[str, str]) -> None:

@@ -35,3 +35,4 @@ build-backend = "hatchling.build"
 
 Populate the package `README.md` and add an entry to the
 ecosystem section [`README.md` of the repository](./README.md#ecosystem).
+

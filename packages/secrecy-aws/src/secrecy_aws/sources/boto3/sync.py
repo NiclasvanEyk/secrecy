@@ -2,10 +2,10 @@ import json
 from typing import override
 
 from boto3 import client as create_default_boto3_client
-from secrecy.abc.sync import SecretsSource
+from secrecy.abc.sync import ReadableSecretsSource, WritableSecretsSource
 
 
-class SecretsManagerSecretSource(SecretsSource):
+class SecretsManagerSecretSource(ReadableSecretsSource, WritableSecretsSource):
     def __init__(
         self,
         secret_id: str,

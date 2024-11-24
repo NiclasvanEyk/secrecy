@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+
+site_name: Secrecy
+site_url: https://secrecy.niclasve.me
+repo_url: https://github.com/NiclasvanEyk/secrecy
+repo_name: NiclasvanEyk/secrecy
+
+nav:
+  - Getting Started: index.md
+  - Core:
+      - core/index.md
+      - Concepts: core/concepts.md
+  - Ecosystem:
+      - ecosystem/index.md
+      - Simple Solutions:
+          - Encrypted Files: ecosystem/simple_solutions/encrypted_files.md
+      - Cloud Providers:
+          - Amazon Web Services (AWS): ecosystem/cloud_providers/aws.md
+          - Azure: ecosystem/cloud_providers/azure.md
+          - Google Cloud: ecosystem/cloud_providers/google_cloud.md
+      - Password Managers:
+          - 1Password: ecosystem/password_managers/onepassword.md
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme)"
+      primary: black
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: black
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+  icon:
+    logo: material/safe-square-outline
+    repo: fontawesome/brands/github
+  features:
+    - content.tooltips
+    - content.code.annotate
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.tracking
+    - toc.follow
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      repository: NiclasvanEyk/secrecy
+      branch: main
