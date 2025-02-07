@@ -9,6 +9,3 @@ dependencies = ["secrecy"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.uv.sources]
-secrecy = { workspace = true }

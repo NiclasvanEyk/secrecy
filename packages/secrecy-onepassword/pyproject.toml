@@ -4,10 +4,7 @@ dynamic = ["version"]
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
- "onepassword-sdk>=0.1.2",
- "secrecy",
-]
+dependencies = ["onepassword-sdk>=0.1.2", "secrecy"]
 
 [build-system]
 requires = ["hatchling"]
@@ -15,6 +12,3 @@ build-backend = "hatchling.build"
 
 [tool.hatch.version]
 path = "src/secrecy_onepassword/__about__.py"
-
-[tool.uv.sources]
-secrecy = { workspace = true }

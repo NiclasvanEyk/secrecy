@@ -3,7 +3,7 @@ import os
 from secrecy.exception import MissingEnvironmentVariableError
 
 
-def require_environment_variable(
+def require_env_var(
     prefix: str,
     secret_name: str,
     unprefix_variable_name: str,
@@ -19,7 +19,7 @@ def require_environment_variable(
     return value
 
 
-def optional_environment_variable(
+def get_env_var(
     prefix: str,
     unprefix_variable_name: str,
     default: str,

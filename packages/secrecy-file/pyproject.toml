@@ -4,10 +4,7 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-  "cryptography>=43.0.1",
-  "secrecy",
-]
+dependencies = ["cryptography>=43.0.1", "secrecy"]
 
 [project.scripts]
 secrecy-file = "secrecy_file.cli:main"
@@ -15,6 +12,3 @@ secrecy-file = "secrecy_file.cli:main"
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.uv.sources]
-secrecy = { workspace = true }
