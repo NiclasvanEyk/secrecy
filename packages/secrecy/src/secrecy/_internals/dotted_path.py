@@ -22,6 +22,8 @@ def import_dotted_path(path: str) -> tuple[ModuleType, Any]:
     represents your ASGI app.
 
     We mostly use this for driver functions.
+
+    See https://packaging.python.org/en/latest/specifications/entry-points/#data-model for sample code
     """
     path_to_module, member_name = path.split(":")
     module = import_module(path_to_module)

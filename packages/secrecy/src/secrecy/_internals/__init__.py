@@ -7,7 +7,7 @@ Instead, import from one of the top-level modules not beginning in an underscore
 
 ```python
 # ❌ bad
-from secrecy._internals.sync import Secret
+from secrecy._internals.source.sync import Secret
 
 # ✅ good
 from secrecy import Secret

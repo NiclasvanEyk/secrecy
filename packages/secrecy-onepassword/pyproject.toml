@@ -3,7 +3,7 @@ name = "secrecy-onepassword"
 dynamic = ["version"]
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = ["onepassword-sdk>=0.1.2", "secrecy"]
 
 [build-system]

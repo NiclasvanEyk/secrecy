@@ -3,5 +3,3 @@ from secrecy_environment.sources.environment.sync import (
 )
 
 
-def environment(prefix: str, name: str) -> EnvironmentVariablesSecretsSource:
-    return EnvironmentVariablesSecretsSource(prefix)

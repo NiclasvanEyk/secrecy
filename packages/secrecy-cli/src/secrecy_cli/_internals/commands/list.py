@@ -3,15 +3,15 @@ import json
 import click
 from rich.console import Console
 from rich.table import Table
+from secrecy import Secret
 from secrecy.exception import SecrecyError
-from secrecy.secret import Secret
 
-from secrecy_cli.config.discovery import resolve_config
-from secrecy_cli.exceptions import exit_err
-from secrecy_cli.inspect import infer_source_type
-from secrecy_cli.io import OutputFormat
-from secrecy_cli.secrets.discovery import discover_secrets_in
-from secrecy_cli.utils import enum_type
+from secrecy_cli._internals.config.discovery import resolve_config
+from secrecy_cli._internals.exceptions import exit_err
+from secrecy_cli._internals.inspect import infer_source_type
+from secrecy_cli._internals.io import OutputFormat
+from secrecy_cli._internals.secrets.discovery import discover_secrets_in
+from secrecy_cli._internals.utils import enum_type
 
 
 @click.command(name="list")
@@ -29,8 +29,10 @@ from secrecy_cli.utils import enum_type
     show_default=True,
 )
 def list_command(format: OutputFormat, resolve: bool):
-    """Fetch a secret from the specified source."""
+    """Show all secrets discovered by the CLI.
 
+    You can configure several modules to be scanned for secrets.
+    """
     try:
         config = resolve_config()
         secrets = discover_secrets_in(config.secrets.modules)
@@ -46,15 +48,19 @@ def list_command(format: OutputFormat, resolve: bool):
 def show_text(secrets: list[Secret]) -> None:
     table = Table(box=None)
     table.add_column("Name")
-    table.add_column("Driver")
+    table.add_column("Type")
+    table.add_column("Source")
 
     for secret in secrets:
         source_type = infer_source_type(secret)
         table.add_row(
-            secret.name,
+            secret.definition().name,
+            secret.definition().shape.__name__,
+            # TODO: dynamic[unknown] for unknowns, dynamic[secrecy-aws:boto3] for known values based on env
+            # TODO: If we notice a driver that could not be discovered, paint it red
             f"{source_type.__module__}.{source_type.__qualname__}"
             if source_type is not None
-            else "[gray50]dynamic",
+            else "[gray50]default",
         )
 
     console = Console()
@@ -65,8 +71,9 @@ def show_json(secrets: list[Secret]) -> None:
     serialized = json.dumps(
         [
             {
-                "name": secret.name,
-                "driver": "unresolved",
+                "name": secret.definition().name,
+                "type": secret.definition().shape.__name__,
+                "source": "unresolved",
             }
             for secret in secrets
         ]

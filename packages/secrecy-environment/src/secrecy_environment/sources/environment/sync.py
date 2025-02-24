@@ -1,29 +1,29 @@
 import os
 from typing import override
 
-from secrecy.abc.sync import ReadableSecretsSource
+from secrecy import Definition, Source
 
 INTERNAL_KEYS = {
     "driver",
 }
 
 
-class EnvironmentVariablesSecretsSource(ReadableSecretsSource):
-    def __init__(self, prefix: str) -> None:
-        super().__init__()
-        self.prefix = prefix
+class EnvironmentVariablesSecretsSource[T](Source):
+    @override
+    def fetch(self, definition: Definition[T]) -> T:
+        """Retrieve the value of a secret."""
 
     @override
-    def pull(self) -> dict[str, str]:
+    def validate(self, definition: Definition[T]) -> T:
         secrets: dict[str, str] = {}
-        for key, value in os.environ.items():
-            if key.startswith(self.prefix):
-                sanitized_key = key.removeprefix(self.prefix).removeprefix("_")
-                sanitized_key = sanitized_key.lower()
+        for prefixed_key, value in os.environ.items():
+            if prefixed_key.startswith(self.prefix):
+                key = prefixed_key.removeprefix(self.prefix).removeprefix("_")
+                key = key.lower()
 
                 # Don't add e.g. the driver to the secrets
-                if sanitized_key in INTERNAL_KEYS:
+                if key in INTERNAL_KEYS:
                     continue
 
-                secrets[sanitized_key] = value
+                secrets[key] = value
         return secrets

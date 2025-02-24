@@ -20,6 +20,7 @@ nav:
           - Google Cloud: ecosystem/cloud_providers/google_cloud.md
       - Password Managers:
           - 1Password: ecosystem/password_managers/onepassword.md
+  - API Reference: reference.md
 
 theme:
   name: material
@@ -60,3 +61,24 @@ plugins:
   - git-committers:
       repository: NiclasvanEyk/secrecy
       branch: main
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          extensions:
+            - griffe_inherited_docstrings
+          options:
+            docstring_style: sphinx
+            show_bases: false
+            show_source: false
+            show_root_heading: true
+            show_if_no_docstring: true
+            show_signature_annotations: true
+            inherited_members: true
+            members_order: source
+            separate_signature: true
+            unwrap_annotated: true
+            filters: ["!^_", "!internal"]
+            merge_init_into_class: true
+            signature_crossrefs: true
+            show_symbol_type_heading: true

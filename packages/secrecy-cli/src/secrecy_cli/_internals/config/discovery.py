@@ -4,7 +4,7 @@ from typing import Any
 from secrecy.exception import SecrecyError
 from tomllib import load
 
-from secrecy_cli.config.schema import SecrecyCliConfig
+from secrecy_cli._internals.config.schema import SecrecyCliConfig
 
 ParsedTomlValues = dict[str, Any]
 

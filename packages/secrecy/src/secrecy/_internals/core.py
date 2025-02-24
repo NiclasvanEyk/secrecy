@@ -2,7 +2,7 @@ from abc import abstractmethod
 from collections.abc import Mapping
 from typing import Protocol, final, runtime_checkable
 
-type JSON = None | str | int | float | bool | Mapping[str, JSON]
+type JSON = None | str | int | float | bool | Mapping[str, "JSON"]
 
 
 @final
@@ -16,7 +16,7 @@ class Definition[T = str]:
     Unique here refers to the context of **your** application / use-case.
     """
 
-    data_type: type[T]
+    shape: type[T]
     """
     The data type or shape of your secret.
 
@@ -45,7 +45,7 @@ class Definition[T = str]:
     environments.
     """
 
-    def __init__(self, name: str, data_type: type[T] = str) -> None:
+    def __init__(self, name: str, shape: type[T] = str) -> None:
         """Construct a new secret defintion.
 
         Check the class- and property-level documentation for more detailed
@@ -53,7 +53,7 @@ class Definition[T = str]:
         """
         super().__init__()
         self.name = name
-        self.data_type = data_type
+        self.shape = shape
 
 
 @runtime_checkable

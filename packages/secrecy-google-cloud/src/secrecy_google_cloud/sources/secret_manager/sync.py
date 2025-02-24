@@ -1,29 +1,34 @@
-import json
 from typing import override
 
 from google.cloud.secretmanager import SecretManagerServiceClient
-from secrecy.abc.sync import ReadableSecretsSource
+from secrecy import Definition, Source
+from secrecy.serialization import serialize_from_string
 
 
-class SecretManagerSecretSource(ReadableSecretsSource):
+class SecretManagerSecretSource(Source):
     def __init__(
         self,
         client: SecretManagerServiceClient,
         project_id: str,
-        secret_name: str,
-        secret_version: str,
     ) -> None:
         super().__init__()
         self.client = client
         self.project_id = project_id
-        self.secret_name = secret_name
-        self.secret_version = secret_version
 
     @override
-    def pull(self) -> dict[str, str]:
-        response = self.client.access_secret_version(name=self.resource_name())
+    def fetch[T](self, definition: Definition[T]) -> T:
+        response = self.client.access_secret_version(
+            name=self.resource_name(definition.name)
+        )
         payload = response.payload.data.decode("UTF-8")
-        return json.loads(payload)
+        return serialize_from_string(definition, payload)
 
-    def resource_name(self) -> str:
-        return f"projects/{self.project_id}/secrets/{self.secret_name}/versions/{self.secret_version}"
+    @override
+    def validate[T](self, definition: Definition[T]) -> None:
+        # TODO
+        pass
+
+    def resource_name(self, secret_name: str) -> str:
+        # TODO: Make this parameterizable
+        secret_version = "latest"
+        return f"projects/{self.project_id}/secrets/{secret_name}/versions/{secret_version}"

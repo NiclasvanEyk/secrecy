@@ -4,14 +4,27 @@ By itself, this package is useless, you need to pair it with one of the driver p
 """
 
 from secrecy._internals.core import JSON, Definition, WrapsDefinition
-from secrecy._internals.sync import Secret, Source, retrieve, validate
+from secrecy._internals.source.registry import (
+    MissingDefaultSourceError,
+    SourceRegistry,
+    UnknownSourceError,
+    default_source,
+    register_source,
+)
+from secrecy._internals.source.sync import Source
+from secrecy._internals.sync import Secret, retrieve, validate
 
 __all__ = [
     "Definition",
     "JSON",
+    "MissingDefaultSourceError",
     "Secret",
     "Source",
+    "SourceRegistry",
+    "UnknownSourceError",
     "WrapsDefinition",
+    "register_source",
+    "default_source",
     "retrieve",
     "validate",
 ]

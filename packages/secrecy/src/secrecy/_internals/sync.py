@@ -1,25 +1,10 @@
-from abc import ABC, abstractmethod
 from typing import final, override
 
 from secrecy._internals.core import Definition, WrapsDefinition, unwrap_definition
 from secrecy._internals.dynamic import resolve_dynamic_source_factory
+from secrecy._internals.source.registry import SourceRegistry, UnknownSourceError
+from secrecy._internals.source.sync import Source
 from secrecy.exception import SecrecyError
-
-
-class Source(ABC):
-    """Wraps all state and configuration needed to retrieve the value of a secret."""
-
-    @abstractmethod
-    def fetch[T](self, definition: Definition[T]) -> T:
-        """Retrieve the value of a secret."""
-
-    @abstractmethod
-    def validate[T](self, definition: Definition[T]) -> T:
-        """Validate that everything is configured, so that we can fetch the definition at runtime.
-
-        The rule of thumb is, that
-        """
-        # TODO: Continue documentation
 
 
 @final
@@ -36,17 +21,27 @@ class Secret[T = str](WrapsDefinition[T]):
     def __init__(
         self,
         name: str,
-        data_type: type[T] = str,  # TODO: Support pydantic, attrs, or dataclasses here?
-        source: Source | None = None,
+        shape: type[T] = str,
+        source: str | Source | None = None,
+        source_registry: SourceRegistry | None = None,
     ) -> None:
         """Define a new secret.
 
-        If you intend to e.g. store JSON in here, make sure to set the
-        `data_type` accordingly.
+        :param name: The unique name of your secret.
+        :param shape: The data type of your secret. If you intend to e.g. store JSON in here, use :py:type:`secrecy.JSON`
+        :param source: A shape
+        :param source_registry: A shape
         """
         super().__init__()
-        self._definition = Definition(name, data_type)
-        self._source = source or DynamicSource()
+        self._definition = Definition(name, shape)
+        if isinstance(source, str):
+            registry = source_registry or SourceRegistry.global_instance()
+            resolved = registry.resolve(source)
+            if not resolved:
+                raise UnknownSourceError(f"Unknown source '{source}'")
+            self._source = resolved
+        else:
+            self._source = source or DynamicSource()
 
     @override
     def definition(self) -> Definition[T]:

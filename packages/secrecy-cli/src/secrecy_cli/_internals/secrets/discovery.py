@@ -2,7 +2,7 @@
 
 from importlib import import_module
 
-from secrecy.secret import Secret
+from secrecy import Secret
 
 
 def discover_secrets_in(modules: set[str]) -> list[Secret]:
