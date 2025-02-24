@@ -1,48 +1,33 @@
-from dataclasses import dataclass
+import subprocess
 from enum import StrEnum
 from os import getcwd, listdir
 from pathlib import Path
 
 import click
 import tomllib
+from pick import pick
 
 
 @click.command()
-# TODO:
-@click.option("--module", default=None)
-@click.option("--no-docs", is_flag=True, default=False)
-@click.option("--no-examples", is_flag=True, default=False)
-@click.option("--bare", is_flag=True, default=False)
-def init(module: str | None, no_docs: bool, no_examples: bool, bare: bool):
+@click.option(
+    "--module",
+    default=None,
+    help="A path to the module where the file containing the secrets should be placed",
+)
+def init(module: str | None):
     """Run through the initialization process.
 
     This consists of setting up a `secrets.py` file, defining a default source,
     and optionally installing additional first-party sources.
     """
-    # This reads horrible, but this way it is easier to opt-out of the boilerplate.
-    add_docs = not no_docs
-    if bare:
-        add_docs = False
-    add_examples = not no_examples
-    if bare:
-        add_examples = False
-
     cwd = Path(getcwd())
     module_dir = _get_valid_module_dir(cwd, module)
 
-    # TODO: Recommend sources
-    _recommend_drivers()
+    selected_sources = _recommend_sources()
+    package_manager = _infer_package_manager(cwd)
+    _install_drivers(package_manager, selected_sources)
 
-    created_file = _create_secrets_py(
-        directory=module_dir,
-        docs=add_docs,
-        examples=add_examples,
-        default_source=DefaultSource(
-            name="default",
-            module="secrecy_demo_source",
-            type="DemoSource",
-        ),
-    )
+    created_file = _create_secrets_py(directory=module_dir, sources=selected_sources)
     if created_file is None:
         return
 
@@ -98,8 +83,15 @@ def _is_python_module(path: Path) -> bool:
     return path.is_dir() and (path / "__init__.py").is_file()
 
 
-def _recommend_drivers() -> None:
-    """"""
+def _recommend_sources() -> list[str]:
+    result: list[tuple[str, int]] = pick(
+        title="Select a source using <space>, confirm your selection with <enter>",
+        clear_screen=False,
+        options=list(DEFAULT_SOURCES_BY_PACKAGE.keys()),
+        multiselect=True,
+    )
+
+    return [option for option, _ in result]
 
 
 class PackageManager(StrEnum):
@@ -111,6 +103,18 @@ class PackageManager(StrEnum):
     """https://python-poetry.org"""
     PDM = "pdm"
     """https://pdm-project.org"""
+
+
+# TODO: Write a test for this mapping
+DEFAULT_SOURCES_BY_PACKAGE = {
+    "secrecy-aws": "SecretsManagerSource",
+    # "secrecy-azure": "",
+    # "secrecy-docker",
+    # "secrecy-environment",
+    # "secrecy-file",
+    # "secrecy-google-cloud",
+    # "secrecy-onepassword",
+}
 
 
 def _infer_package_manager(
@@ -146,58 +150,52 @@ def _infer_package_manager(
     return PackageManager.PIP
 
 
-def _install_drivers(
-    package_manager: PackageManager,
-    packages: list[str],
-) -> None:
-    pass
+def _install_drivers(package_manager: PackageManager, packages: list[str]) -> None:
+    if len(packages) == 0:
+        return
 
-
-def _prompt_default_source() -> str:
-    """"""
-
-
-@dataclass
-class DefaultSource:
-    name: str
-    module: str
-    type: str
+    verb = "install" if package_manager is PackageManager.PIP else "add"
+    cmdline = subprocess.list2cmdline([str(package_manager), verb, *packages])
+    click.echo(cmdline, err=True)
+    subprocess.run(cmdline, shell=True, check=True)
 
 
 def _create_secrets_py(
     directory: Path,
-    default_source: DefaultSource | None,
-    docs: bool,
-    examples: bool,
+    sources: list[str],
 ) -> Path | None:
-    contents = (
-        f"""
-from secrecy import Secret, register_source
-from {default_source.module} import {default_source.type}
+    lines = ["from secrecy import Secret, register_source"]
 
-# TODO: Link to the relevant docs
-register_source("{default_source.name}", {default_source.type}, default=True)
+    for source_package in sources:
+        source_module = source_package.replace("-", "_")
+        default_source_class = DEFAULT_SOURCES_BY_PACKAGE[source_package]
+        lines.append(f"from {source_module} import {default_source_class}")
+    lines.append("")
 
-# These for demonstration purposes only. Feel free to replace them with your own secrets.
-api_token = Secret("api_token")
-db_credentials = Secret("db_credentials")
+    for index, source_package in enumerate(sources):
+        default_source_class = DEFAULT_SOURCES_BY_PACKAGE[source_package]
+        source_name = source_package.removeprefix("secrecy-")
+        if index == 0:
+            lines.append(
+                f'register_source("{source_name}", {default_source_class}, default=True)'
+            )
+        else:
+            lines.append(f'register_source("{source_name}", {default_source_class})')
+    lines.append("")
 
-# To use these,
-""".strip()
-        + "\n"
-    )
+    lines += [
+        "# These for demonstration purposes only. Feel free to replace them with your own secrets.",
+        'api_token = Secret("api_token")',
+        'db_credentials = Secret("db_credentials")',
+        "",
+    ]
     file_path = directory / "secrets.py"
 
     if file_path.exists():
-        click.echo(
-            f"'{file_path}' already exists, do you want to override it? [y/N]: ",
-            nl=False,
-        )
-        choice = click.getchar()
-        click.echo()
-        if choice.lower() != "y":
-            click.echo("Aborting...")
+        if not click.confirm(
+            f"'{file_path}' already exists, do you want to override it?"
+        ):
             return None
 
-    file_path.write_text(contents)
+    file_path.write_text("\n".join(lines))
     return file_path
