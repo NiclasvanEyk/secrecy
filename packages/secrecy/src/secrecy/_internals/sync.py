@@ -34,14 +34,9 @@ class Secret[T = str](WrapsDefinition[T]):
         """
         super().__init__()
         self._definition = Definition(name, shape)
-        if isinstance(source, str):
-            registry = source_registry or SourceRegistry.global_instance()
-            resolved = registry.resolve(source)
-            if not resolved:
-                raise UnknownSourceError(f"Unknown source '{source}'")
-            self._source = resolved
-        else:
-            self._source = source or DynamicSource()
+        self._source = _resolve_source(
+            source, source_registry or SourceRegistry.global_instance()
+        )
 
     @override
     def definition(self) -> Definition[T]:
@@ -62,6 +57,24 @@ class Secret[T = str](WrapsDefinition[T]):
         Read the docs of the `secrecy.retrieve` function for more information.
         """
         return retrieve(self, self._source)
+
+
+def _resolve_source(source: str | Source | None, registry: SourceRegistry) -> Source:
+    if isinstance(source, Source):
+        return source
+
+    if isinstance(source, str):
+        resolved = registry.resolve(source)
+        if not resolved:
+            raise UnknownSourceError(f"Unknown source '{source}'")
+        return resolved
+
+    if registry.default_source:
+        resolved_default = registry.resolve(registry.default_source)
+        if resolved_default:
+            return resolved_default
+
+    return DynamicSource()
 
 
 @final
