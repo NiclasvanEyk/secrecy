@@ -4,6 +4,7 @@ import click
 from rich.console import Console
 from rich.table import Table
 from secrecy import Secret
+from secrecy._internals.source.registry import SourceRegistry
 from secrecy.exception import SecrecyError
 
 from secrecy_cli._internals.config.discovery import resolve_config
@@ -51,6 +52,8 @@ def show_text(secrets: list[Secret]) -> None:
     table.add_column("Type")
     table.add_column("Source")
 
+    default = SourceRegistry.global_instance().default_source
+
     for secret in secrets:
         source_type = infer_source_type(secret)
         table.add_row(
@@ -60,7 +63,7 @@ def show_text(secrets: list[Secret]) -> None:
             # TODO: If we notice a driver that could not be discovered, paint it red
             f"{source_type.__module__}.{source_type.__qualname__}"
             if source_type is not None
-            else "[gray50]default",
+            else f"[gray50]{default or 'default'}",
         )
 
     console = Console()
